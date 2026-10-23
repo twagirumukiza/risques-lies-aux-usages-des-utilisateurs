@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BTS SIO SISR — Thème 3, Séance 1 · Risques liés aux usages des utilisateurs</title>
+<meta name="description" content="Cours BTS SIO SISR : BYOD, télétravail, supports amovibles, ingénierie sociale, phishing et variantes, charte informatique. Étude de cas, QCM, FAQ et téléchargements.">
+<meta name="author" content="Twagirumukiza">
+<meta name="theme-color" content="#14284b">
+<style>
+:root{
+  --bg:#f4f7fb;--card:#ffffff;--ink:#1f2933;--muted:#5b6877;--line:#d5dee8;--soft:#eaf1f8;
+  --head:#14284b;--teal:#0e7c86;--amber:#d98e04;--red:#b3261e;--green:#2e7d32;--purple:#5b3fa0;--blue:#3b6fd1;
+  --thbg:#14284b;--thfg:#fff;--side:#14284b;--sidefg:#c9d6ea;--sideact:#0e7c86;
+  --shadow:0 1px 2px rgba(20,40,75,.08),0 6px 18px rgba(20,40,75,.06);
+  --top:58px;--sw:290px;--fs:100%;
+}
+html[data-theme="dark"]{
+  --bg:#0d1520;--card:#152130;--ink:#e6edf5;--muted:#9fb0c3;--line:#26364a;--soft:#1a2a3d;
+  --head:#a9c8f7;--teal:#4fc3cc;--amber:#f2b84b;--red:#ff8f85;--green:#82d68f;--purple:#b7a2f2;--blue:#8fb4ee;
+  --thbg:#1f3a5f;--thfg:#fff;--side:#0a1220;--sidefg:#a9bad0;--sideact:#1c6f78;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+html{font-size:var(--fs);scroll-behavior:smooth;scroll-padding-top:calc(var(--top) + 14px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:1rem/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;transition:background .25s,color .25s}
+body.collapsed{--sw:68px}
+a{color:var(--teal)}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:4px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--amber);color:#000;padding:8px 14px;border-radius:6px;z-index:200}
+.skip:focus{left:8px}
+
+/* top bar */
+.topbar{position:fixed;inset:0 0 auto 0;height:var(--top);background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:0 14px;z-index:60}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:40px;padding:0 10px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;cursor:pointer;font:600 .95rem system-ui;transition:background .15s,border-color .15s}
+.iconbtn:hover{background:var(--soft);border-color:var(--teal)}
+.burger{flex-direction:column;gap:4px}
+.burger i{display:block;width:18px;height:2px;background:var(--ink);border-radius:2px;transition:transform .25s,opacity .2s}
+.brand{font-weight:800;color:var(--head);letter-spacing:.02em;white-space:nowrap;display:flex;flex-direction:column;line-height:1.15}
+.brand small{font-weight:500;color:var(--muted);font-size:.7rem;letter-spacing:0}
+.search{position:relative;flex:1;max-width:420px;margin-left:auto}
+.search input{width:100%;height:40px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:0 12px 0 36px;font:inherit;font-size:.92rem}
+.search::before{content:"🔎";position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:.85rem;opacity:.7}
+.results{position:absolute;top:46px;left:0;right:0;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);max-height:60vh;overflow:auto;display:none}
+.results.on{display:block}
+.results a{display:block;padding:10px 14px;text-decoration:none;color:var(--ink);border-bottom:1px solid var(--line);font-size:.9rem}
+.results a:last-child{border-bottom:0}
+.results a:hover,.results a:focus{background:var(--soft)}
+.results b{color:var(--head);display:block}
+.results em{font-style:normal;background:rgba(217,142,4,.3);border-radius:3px}
+.results .tag{font-size:.7rem;color:var(--teal);text-transform:uppercase;letter-spacing:.06em}
+.tools{display:flex;gap:6px}
+.progress{position:fixed;top:var(--top);left:0;height:3px;width:0;background:linear-gradient(90deg,var(--teal),var(--amber));z-index:61}
+
+/* sidebar */
+.sidebar{position:fixed;top:var(--top);bottom:0;left:0;width:var(--sw);background:var(--side);color:var(--sidefg);overflow-y:auto;overflow-x:hidden;z-index:50;transition:width .25s,transform .25s;padding:14px 10px 20px}
+.sidebar nav{display:flex;flex-direction:column;gap:2px}
+.nav-i{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:var(--sidefg);text-decoration:none;font-weight:600;font-size:.95rem;white-space:nowrap;position:relative}
+.nav-i .ic{width:26px;text-align:center;font-size:1.15rem;flex:none}
+.nav-i:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-i.active{background:var(--sideact);color:#fff}
+.sub{display:flex;flex-direction:column;margin:2px 0 8px 22px;border-left:2px solid rgba(255,255,255,.14)}
+.sub a{padding:6px 12px;color:var(--sidefg);text-decoration:none;font-size:.85rem;border-radius:0 8px 8px 0;white-space:nowrap}
+.sub a:hover{color:#fff;background:rgba(255,255,255,.06)}
+.sub a.on{color:#fff;font-weight:700;border-left:3px solid var(--amber);margin-left:-2px;background:rgba(255,255,255,.07)}
+.side-foot{margin-top:18px;padding:12px;font-size:.78rem;opacity:.75;border-top:1px solid rgba(255,255,255,.12)}
+body.collapsed .nav-i .lb,body.collapsed .sub,body.collapsed .side-foot{display:none}
+body.collapsed .nav-i{justify-content:center;padding:10px 0}
+body.collapsed .nav-i:hover::after{content:attr(data-tip);position:fixed;left:74px;background:#000;color:#fff;padding:5px 10px;border-radius:6px;font-size:.8rem;font-weight:600;z-index:90;pointer-events:none}
+.overlay{position:fixed;inset:var(--top) 0 0 0;background:rgba(0,0,0,.5);z-index:45;display:none}
+
+/* main */
+.main{margin-left:var(--sw);padding:calc(var(--top) + 26px) 28px 40px;transition:margin .25s;min-height:100vh}
+.wrap{max-width:900px;margin:0 auto}
+.tab[hidden]{display:none}
+.hero{background:linear-gradient(135deg,#14284b 0%,#1b3d70 60%,#0e7c86 130%);color:#fff;border-radius:18px;padding:34px 30px;margin-bottom:26px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06)}
+.hero .kick{color:#7fd1d8;font-weight:700;letter-spacing:.08em;font-size:.82rem;text-transform:uppercase}
+.hero h1{margin:6px 0 10px;font-size:clamp(1.7rem,4.5vw,2.5rem);line-height:1.15}
+.hero p{margin:0;color:#c9d6ea;max-width:60ch}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);padding:6px 12px;border-radius:999px;font-size:.85rem}
+.chip b{color:#fff}
+h2{color:var(--head);font-size:1.55rem;line-height:1.25;margin:0 0 14px}
+h3{color:var(--head);font-size:1.2rem;margin:26px 0 8px}
+h4{color:var(--teal);font-size:1.02rem;margin:20px 0 6px}
+p{margin:0 0 12px}
+.part{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 26px 18px;margin-bottom:22px;box-shadow:var(--shadow)}
+.part>h2{padding-bottom:10px;border-bottom:3px solid var(--teal);display:flex;gap:12px;align-items:center}
+.part>h2 .n{background:var(--head);color:var(--card);font-size:.8rem;padding:4px 10px;border-radius:8px;white-space:nowrap}
+ul.bl{padding-left:1.2rem;margin:0 0 14px}
+ul.bl li{margin:4px 0}
+ul.bl li::marker{color:var(--teal)}
+.callout{--c:var(--teal);border-left:5px solid var(--c);background:var(--soft);border-radius:0 12px 12px 0;padding:12px 16px;margin:16px 0}
+.callout>b:first-child,.callout .lab{color:var(--c);text-transform:uppercase;font-size:.78rem;letter-spacing:.07em;display:block;margin-bottom:2px}
+.callout.warn{--c:var(--amber)}.callout.danger{--c:var(--red)}.callout.ok{--c:var(--green)}.callout.navy{--c:var(--head)}
+.callout p:last-child{margin:0}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:14px 0 18px}
+.card{--c:var(--teal);background:var(--bg);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:12px;padding:14px 16px}
+.card h4{margin:0 0 6px;color:var(--c)}
+.card .ex{color:var(--muted);font-style:italic;font-size:.9rem;margin:8px 0 0}
+.card.navy{--c:var(--head)}.card.amber{--c:var(--amber)}.card.red{--c:var(--red)}.card.purple{--c:var(--purple)}.card.green{--c:var(--green)}
+.tbl{overflow-x:auto;margin:12px 0 18px;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:.93rem;min-width:520px}
+th{background:var(--thbg);color:var(--thfg);text-align:left;padding:10px 12px;font-weight:700}
+td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:var(--soft)}
+td:first-child{font-weight:700;color:var(--head)}
+.tbl.red th{background:var(--red)}.tbl.teal th{background:var(--teal)}
+html[data-theme="dark"] .tbl.red th{background:#8a2a24}html[data-theme="dark"] .tbl.teal th{background:#14636b}
+ol.steps{list-style:none;counter-reset:s;padding:0;margin:10px 0 16px}
+ol.steps li{counter-increment:s;display:flex;gap:14px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px}
+ol.steps li::before{content:counter(s);flex:none;width:32px;height:32px;border-radius:9px;background:var(--c,var(--teal));color:#fff;font-weight:800;display:grid;place-items:center}
+ol.steps.navy{--c:var(--head)}ol.steps.green{--c:var(--green)}
+html[data-theme="dark"] ol.steps.navy li::before{background:#2c5a99}
+ol.steps li div b{display:block;color:var(--head)}
+.incident{--c:var(--red);border:1px solid var(--c);border-radius:12px;overflow:hidden;margin:10px 0}
+.incident>b{display:block;background:var(--c);color:#fff;padding:6px 14px;font-size:.82rem;letter-spacing:.06em}
+.incident>div{padding:10px 14px;background:var(--bg)}
+.incident.b{--c:#c47d00}.incident.c{--c:var(--purple)}
+.example{border:1px dashed var(--teal);border-radius:12px;padding:12px 16px;margin:14px 0;background:var(--bg)}
+.example>b:first-child{color:var(--teal);text-transform:uppercase;font-size:.78rem;letter-spacing:.07em;display:block}
+
+/* mail simulation */
+.mail{border:2px solid var(--red);border-radius:12px;overflow:hidden;background:#fff;color:#1f2933;max-width:640px;margin:12px 0}
+.mail .ban{background:var(--red);color:#fff;font-weight:700;font-size:.78rem;padding:6px 12px;letter-spacing:.05em}
+html[data-theme="dark"] .mail .ban{background:#8a2a24}
+.mail .in{padding:14px 18px}
+.mail .in p{margin:0 0 10px}
+.hot{font:inherit;color:inherit;background:rgba(217,142,4,.18);border:0;border-bottom:2px dashed var(--amber);padding:1px 4px;cursor:pointer;border-radius:4px;text-align:left}
+.hot:hover,.hot.sel{background:rgba(217,142,4,.45)}
+.mbtn{display:inline-block;background:var(--blue);color:#fff;padding:9px 18px;border-radius:6px;font-weight:700;border:0;cursor:pointer;font:inherit;font-weight:700;border-bottom:3px dashed var(--amber)}
+.clue{margin:10px 0 0;min-height:70px}
+
+/* qcm */
+fieldset.q{border:1px solid var(--line);border-radius:12px;padding:12px 16px 8px;margin:0 0 12px;background:var(--bg)}
+fieldset.q legend{font-weight:700;color:var(--head);padding:0 6px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:7px 10px;border-radius:8px;cursor:pointer;margin:2px 0;border:1px solid transparent}
+.opt:hover{background:var(--soft)}
+.opt input{margin-top:5px;accent-color:var(--teal)}
+.opt.good{background:rgba(46,125,50,.16);border-color:var(--green)}
+.opt.bad{background:rgba(179,38,30,.14);border-color:var(--red)}
+.exp{font-size:.9rem;margin:6px 4px 8px;color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--teal);color:#fff;border:0;border-radius:10px;padding:10px 18px;font:700 .95rem system-ui;cursor:pointer;text-decoration:none}
+.btn:hover{filter:brightness(1.1)}
+.btn.alt{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.navy{background:#1b3d70}
+.score{font-weight:800;font-size:1.1rem;margin-left:12px;color:var(--head)}
+
+/* faq */
+details.sec{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;box-shadow:var(--shadow)}
+details.sec summary{cursor:pointer;padding:14px 18px;font-weight:700;color:var(--head);list-style:none;display:flex;justify-content:space-between;gap:12px}
+details.sec summary::after{content:"＋";color:var(--teal);font-weight:800}
+details.sec[open] summary::after{content:"−"}
+details.sec .ans{padding:0 18px 6px}
+
+.dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.dlc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px}
+.dlc .big{font-size:2.2rem}
+.dlc h3{margin:0}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin:18px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:var(--ink);box-shadow:var(--shadow);transition:transform .15s,border-color .15s}
+.tile:hover{transform:translateY(-3px);border-color:var(--teal)}
+.tile .ic{font-size:1.6rem}
+.tile b{display:block;color:var(--head);margin:4px 0 2px}
+.tile span{color:var(--muted);font-size:.88rem}
+
+footer{margin:40px auto 0;max-width:900px;border-top:1px solid var(--line);padding:22px 0 10px;text-align:center;color:var(--muted);font-size:.92rem}
+footer .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+footer a{font-weight:700;text-decoration:none;border:1px solid var(--line);padding:7px 14px;border-radius:999px;background:var(--card)}
+footer a:hover{border-color:var(--teal)}
+.totop{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:50%;border:0;background:var(--teal);color:#fff;font-size:1.2rem;cursor:pointer;box-shadow:var(--shadow);display:none;z-index:40}
+.totop.on{display:block}
+
+@media (max-width:900px){
+  .sidebar{transform:translateX(-102%);width:292px;box-shadow:6px 0 24px rgba(0,0,0,.35)}
+  body.open .sidebar{transform:none}
+  body.open .overlay{display:block}
+  .main{margin-left:0;padding:calc(var(--top) + 18px) 14px 40px}
+  body.collapsed{--sw:292px}
+  body.collapsed .nav-i .lb,body.collapsed .sub,body.collapsed .side-foot{display:revert}
+  body.collapsed .sub{display:flex}
+  body.collapsed .nav-i{justify-content:flex-start;padding:10px 12px}
+  body.collapsed .nav-i:hover::after{display:none}
+  .brand small{display:none}
+  .part{padding:18px 16px 10px}
+  .hero{padding:24px 18px}
+  .search{max-width:none}
+}
+@media (max-width:560px){.brand{display:none}.tools .iconbtn{min-width:36px;padding:0 6px}.tools .hide-s{display:none}}
+@media print{
+  .topbar,.sidebar,.progress,.totop,.overlay,footer .links,.noprint{display:none!important}
+  .main{margin:0;padding:0}body{background:#fff;color:#000}
+  .part,.hero{box-shadow:none;break-inside:avoid-page}
+  .tab[hidden]{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Aller au contenu</a>
+
+<header class="topbar">
+  <button class="iconbtn burger" id="burger" aria-label="Ouvrir ou réduire le menu" aria-expanded="false" aria-controls="sidebar"><i></i><i></i><i></i></button>
+  <div class="brand">BTS SIO SISR<small>Thème 3 · Séance 1</small></div>
+  <div class="search">
+    <input id="q" type="search" placeholder="Rechercher dans le cours…  ( / )" autocomplete="off" aria-label="Rechercher dans le cours">
+    <div class="results" id="results" role="listbox"></div>
+  </div>
+  <div class="tools">
+    <button class="iconbtn hide-s" id="fdec" aria-label="Diminuer la taille du texte" title="Texte plus petit">A−</button>
+    <button class="iconbtn hide-s" id="finc" aria-label="Augmenter la taille du texte" title="Texte plus grand">A+</button>
+    <button class="iconbtn" id="theme" aria-label="Basculer entre thème clair et sombre" title="Thème clair / sombre">🌙</button>
+  </div>
+</header>
+<div class="progress" id="progress"></div>
+<div class="overlay" id="overlay"></div>
+
+<aside class="sidebar" id="sidebar" aria-label="Menu principal">
+  <nav>
+    <a class="nav-i" href="#presentation" data-tab="presentation" data-tip="Présentation"><span class="ic">🏠</span><span class="lb">Présentation</span></a>
+    <a class="nav-i" href="#seance1" data-tab="seance1" data-tip="Séance 1 — Risques liés aux usages"><span class="ic">📘</span><span class="lb">Séance 1 · Les usages</span></a>
+    <div class="sub" id="sub-seance1">
+      <a href="#seance1/p0" data-a="p0">Objectifs &amp; déroulement</a>
+      <a href="#seance1/p1" data-a="p1">1 · Pourquoi sécuriser ?</a>
+      <a href="#seance1/p2" data-a="p2">2 · BYOD, télétravail, USB</a>
+      <a href="#seance1/p3" data-a="p3">3 · Ingénierie sociale &amp; phishing</a>
+      <a href="#seance1/p3-6" data-a="p3-6">&nbsp;&nbsp;↳ Variantes du phishing</a>
+      <a href="#seance1/p4" data-a="p4">4 · Charte informatique</a>
+      <a href="#seance1/p5" data-a="p5">5 · Étude de cas &amp; QCM</a>
+      <a href="#seance1/p6" data-a="p6">6 · Synthèse</a>
+    </div>
+    <a class="nav-i" href="#seance2" data-tab="seance2" data-tip="Séance 2"><span class="ic">🛡️</span><span class="lb">Séance 2 · À venir</span></a>
+    <a class="nav-i" href="#annexes" data-tab="annexes" data-tip="Annexes"><span class="ic">📎</span><span class="lb">Annexes</span></a>
+    <a class="nav-i" href="#faq" data-tab="faq" data-tip="FAQ"><span class="ic">❓</span><span class="lb">FAQ</span></a>
+    <a class="nav-i" href="#telechargements" data-tab="telechargements" data-tip="Téléchargements"><span class="ic">⬇️</span><span class="lb">Téléchargements</span></a>
+  </nav>
+  <div class="side-foot">by Twagirumukiza<br>Support de cours — BTS SIO SISR</div>
+</aside>
+
+<main class="main" id="main">
+<div class="wrap">
+
+<!-- ============ PRÉSENTATION ============ -->
+<div class="tab" id="tab-presentation">
+  <section class="hero">
+    <div class="kick">BTS SIO SISR · Thème 3</div>
+    <h1>Risques liés aux usages des utilisateurs</h1>
+    <p>Comprendre comment les comportements des utilisateurs peuvent fragiliser un système d’information, reconnaître le phishing et ses variantes, et savoir rédiger des recommandations professionnelles comme à l’examen.</p>
+    <div class="chips"><span class="chip">⏱ <b>Durée :</b> 2 heures</span><span class="chip">🎓 <b>Niveau :</b> BTS SIO SISR</span><span class="chip">🎯 <b>Focus examen :</b> phishing</span></div>
+  </section>
+
+  <section class="part sec" id="pres-intro">
+    <h2>Bienvenue</h2>
+    <p>Ce site rassemble le support de la <b>Séance 1 du Thème 3</b> : un cours rédigé, un exemple de courriel de phishing interactif, une étude de cas inspirée des épreuves de BTS SIO, un QCM auto-corrigé, une synthèse à mémoriser, une FAQ et les documents à télécharger.</p>
+    <div class="tiles">
+      <a class="tile" href="#seance1"><div class="ic">📘</div><b>Le cours</b><span>Séance 1, en 6 parties</span></a>
+      <a class="tile" href="#seance1/p5"><div class="ic">🧪</div><b>S’entraîner</b><span>Étude de cas NovaCom et QCM</span></a>
+      <a class="tile" href="#annexes"><div class="ic">📎</div><b>Annexes</b><span>Mémos, méthode d’examen, corrections</span></a>
+      <a class="tile" href="#faq"><div class="ic">❓</div><b>FAQ</b><span>Les questions fréquentes</span></a>
+      <a class="tile" href="#telechargements"><div class="ic">⬇️</div><b>Télécharger</b><span>Fascicule et corrections en PDF</span></a>
+    </div>
+  </section>
+
+  <section class="part sec" id="pres-objectifs">
+    <h2>Ce que vous saurez faire</h2>
+    <ul class="bl">
+      <li>Identifier les risques liés aux usages informatiques des utilisateurs.</li>
+      <li>Expliquer les risques du BYOD, du télétravail et des supports amovibles.</li>
+      <li>Reconnaître une tentative de phishing et comprendre les mécanismes de l’ingénierie sociale.</li>
+      <li>Expliquer le rôle d’une charte informatique et d’une politique d’usage acceptable.</li>
+      <li>Proposer des mesures de prévention adaptées à une situation professionnelle.</li>
+      <li>Analyser un document simple et justifier vos recommandations, comme lors d’une épreuve de BTS SIO.</li>
+    </ul>
+  </section>
+
+  <section class="part sec" id="pres-usage">
+    <h2>Utiliser ce site</h2>
+    <ul class="bl">
+      <li><b>Menu :</b> le bouton ☰ ouvre le menu sur mobile et le réduit ou l’agrandit sur ordinateur.</li>
+      <li><b>Thème :</b> le bouton 🌙 / ☀️ bascule entre thème clair et thème sombre.</li>
+      <li><b>Taille du texte :</b> les boutons A− et A+ ajustent le confort de lecture.</li>
+      <li><b>Recherche :</b> tapez un mot (touche <kbd>/</kbd> pour y accéder) pour retrouver une notion dans tout le site.</li>
+      <li><b>Impression :</b> chaque onglet peut être imprimé tel quel.</li>
+    </ul>
+  </section>
+</div>
+
+<!-- ============ SÉANCE 1 ============ -->
+<div class="tab" id="tab-seance1" hidden>
+  <section class="hero">
+    <div class="kick">BTS SIO SISR — Thème 3, Séance 1</div>
+    <h1>Risques liés aux usages des utilisateurs</h1>
+    <div class="chips"><span class="chip">⏱ <b>Durée :</b> 2 heures</span><span class="chip">🎓 <b>Niveau :</b> BTS SIO SISR</span><span class="chip">🎯 <b>Focus examen :</b> phishing</span></div>
+  </section>
+
+  <!-- p0 -->
+  <section class="part" id="p0">
+    <h2><span class="n">1</span>Objectifs pédagogiques</h2>
+    <p>À la fin de cette séance, vous devez être capable de :</p>
+    <ol class="steps">
+      <li><div>Identifier les risques liés aux usages informatiques des utilisateurs.</div></li>
+      <li><div>Expliquer les risques du BYOD, du télétravail et des supports amovibles.</div></li>
+      <li><div>Reconnaître une tentative de phishing et comprendre les mécanismes de l’ingénierie sociale.</div></li>
+      <li><div>Expliquer le rôle d’une charte informatique et d’une politique d’usage acceptable.</div></li>
+      <li><div>Proposer des mesures de prévention adaptées à une situation professionnelle.</div></li>
+      <li><div>Analyser un document simple et justifier vos recommandations, comme lors d’une épreuve de BTS SIO.</div></li>
+    </ol>
+    <h2 style="margin-top:28px"><span class="n">2</span>Déroulement de la séance</h2>
+    <div class="tbl"><table><thead><tr><th>Temps</th><th>Activité</th></tr></thead><tbody>
+      <tr><td>0–15 min</td><td>Introduction : les usages numériques en entreprise</td></tr>
+      <tr><td>15–35 min</td><td>BYOD, télétravail et supports amovibles</td></tr>
+      <tr><td>35–70 min</td><td>Ingénierie sociale et phishing</td></tr>
+      <tr><td>70–90 min</td><td>Charte informatique et usages acceptables</td></tr>
+      <tr><td>90–110 min</td><td>Étude de cas et analyse documentaire</td></tr>
+      <tr><td>110–120 min</td><td>QCM et synthèse</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <!-- PARTIE 1 -->
+  <section class="part" id="p1">
+    <h2><span class="n">Partie 1</span>Pourquoi sécuriser les usages des utilisateurs ?</h2>
+    <h3 class="sec" id="s1-1">1.1. Le facteur humain en cybersécurité</h3>
+    <p>Une organisation possède généralement plusieurs moyens de protection :</p>
+    <ul class="bl">
+      <li>Un pare-feu pour filtrer les communications réseau.</li>
+      <li>Un antivirus ou un EDR pour détecter des comportements malveillants sur les postes.</li>
+      <li>Une authentification forte pour protéger les comptes.</li>
+      <li>Des sauvegardes pour restaurer les données.</li>
+      <li>Des règles internes pour encadrer les usages informatiques.</li>
+    </ul>
+    <p>Cependant, ces protections ne suppriment pas tous les risques.</p>
+    <p>Un utilisateur peut, par exemple, communiquer son mot de passe sur un faux site, ouvrir une pièce jointe malveillante ou envoyer un document confidentiel au mauvais destinataire.</p>
+    <div class="callout navy"><b>Définition</b><p>Le <b>risque lié aux usages</b> correspond à la possibilité qu’un comportement, une erreur ou une manipulation d’un utilisateur compromette la confidentialité, l’intégrité ou la disponibilité du système d’information.</p></div>
+    <div class="example"><b>Exemple concret</b>
+      <p>Un salarié reçoit un courriel qui semble provenir du service informatique. Le message lui demande de confirmer son mot de passe pour éviter la désactivation de son compte.</p>
+      <p>Il clique sur le lien et saisit ses identifiants sur un faux site.</p>
+      <p><b>Conséquence possible :</b> un attaquant récupère ses identifiants et tente d’accéder aux ressources de l’entreprise.</p></div>
+
+    <h3 class="sec" id="s1-2">1.2. Les trois objectifs de sécurité</h3>
+    <p>Les usages des utilisateurs peuvent menacer les trois objectifs fondamentaux de sécurité, appelés souvent <b>triade DIC</b>.</p>
+    <div class="cards">
+      <div class="card navy"><h4>Confidentialité</h4><p>Seules les personnes autorisées doivent accéder aux informations.</p><p class="ex">Exemple : un salarié transmet un fichier contenant les données des clients à une personne extérieure.</p></div>
+      <div class="card"><h4>Intégrité</h4><p>Les informations ne doivent pas être modifiées de manière non autorisée.</p><p class="ex">Exemple : un attaquant modifie un RIB dans une facture transmise par courriel.</p></div>
+      <div class="card amber"><h4>Disponibilité</h4><p>Les services et les données doivent rester accessibles aux utilisateurs autorisés.</p><p class="ex">Exemple : un salarié ouvre une pièce jointe qui déclenche un rançongiciel bloquant l’accès aux fichiers partagés.</p></div>
+    </div>
+    <div class="callout warn"><b>À retenir pour l’examen</b><p>Face à un incident, cherchez toujours à déterminer quel objectif de sécurité est menacé, quelles sont les conséquences et quelles mesures peuvent réduire le risque.</p></div>
+  </section>
+
+  <!-- PARTIE 2 -->
+  <section class="part" id="p2">
+    <h2><span class="n">Partie 2</span>Les risques liés aux usages informatiques</h2>
+    <h3 class="sec" id="s2-1">2.1. Le BYOD : utiliser son équipement personnel</h3>
+    <p><b>BYOD</b> signifie <i>Bring Your Own Device</i>, c’est-à-dire « apportez votre propre équipement ».</p>
+    <p>Un salarié utilise son matériel personnel pour accéder aux ressources de son organisation : ordinateur portable, smartphone ou tablette.</p>
+    <div class="example"><b>Exemple</b>
+      <p>Une entreprise autorise un commercial à consulter ses courriels professionnels depuis son smartphone personnel.</p>
+      <p>Ce smartphone peut contenir simultanément :</p>
+      <ul class="bl"><li>Des courriels professionnels.</li><li>Des photographies personnelles.</li><li>Des applications téléchargées hors des circuits habituels.</li><li>Des données d’authentification enregistrées dans le navigateur.</li></ul>
+      <p>Si le téléphone est perdu ou compromis, les données professionnelles peuvent être exposées.</p></div>
+    <h4>Les principaux risques du BYOD</h4>
+    <div class="tbl"><table><thead><tr><th>Risque</th><th>Explication</th><th>Conséquence possible</th></tr></thead><tbody>
+      <tr><td>Perte ou vol</td><td>L’appareil disparaît.</td><td>Accès non autorisé aux données</td></tr>
+      <tr><td>Système non mis à jour</td><td>Des vulnérabilités restent présentes.</td><td>Compromission de l’appareil</td></tr>
+      <tr><td>Applications risquées</td><td>Une application collecte des données ou est malveillante.</td><td>Fuite d’informations</td></tr>
+      <tr><td>Absence de contrôle</td><td>L’entreprise ne maîtrise pas suffisamment l’appareil.</td><td>Difficulté à détecter ou contenir un incident</td></tr>
+      <tr><td>Usage familial</td><td>D’autres personnes utilisent l’appareil.</td><td>Accès accidentel aux données professionnelles</td></tr>
+    </tbody></table></div>
+    <h4>Comment sécuriser le BYOD ?</h4>
+    <ul class="bl">
+      <li>Définir les appareils autorisés dans une politique écrite.</li>
+      <li>Exiger un système d’exploitation à jour et un verrouillage de l’appareil.</li>
+      <li>Activer l’authentification multifacteur (MFA).</li>
+      <li>Limiter les accès aux seules ressources nécessaires.</li>
+      <li>Séparer, lorsque c’est possible, les données professionnelles des données personnelles.</li>
+      <li>Prévoir une procédure de signalement en cas de perte ou de vol.</li>
+      <li>Utiliser une solution de gestion des appareils mobiles, telle qu’un MDM, si elle est adaptée à l’organisation.</li>
+    </ul>
+    <div class="callout"><b>Point important</b><p>Utiliser son téléphone personnel ne signifie pas automatiquement que le BYOD est interdit ou dangereux. Le risque dépend notamment des accès accordés, de la sécurité de l’appareil et des règles mises en place.</p></div>
+
+    <h3 class="sec" id="s2-2">2.2. Le télétravail</h3>
+    <p>Le télétravail permet à un salarié d’effectuer ses activités hors des locaux de l’entreprise, notamment depuis son domicile.</p>
+    <p>Il peut nécessiter l’accès à distance aux applications internes, aux fichiers partagés ou aux outils collaboratifs.</p>
+    <h4>Les risques du télétravail</h4>
+    <ol class="steps">
+      <li><div><b>Réseau Wi-Fi mal sécurisé</b>Un réseau domestique mal configuré peut faciliter certaines attaques contre les appareils connectés.</div></li>
+      <li><div><b>Utilisation d’un ordinateur personnel</b>L’appareil peut être obsolète, partagé ou insuffisamment protégé.</div></li>
+      <li><div><b>Connexion sur un Wi-Fi public</b>Un réseau public non fiable peut exposer l’utilisateur à des points d’accès frauduleux ou à des interceptions de communications mal protégées.</div></li>
+      <li><div><b>Vol ou perte de matériel</b>Un ordinateur professionnel laissé sans surveillance peut donner accès à des informations confidentielles.</div></li>
+      <li><div><b>Confusion entre environnement professionnel et personnel</b>Des documents professionnels peuvent être copiés vers une messagerie personnelle ou un service de stockage non autorisé.</div></li>
+    </ol>
+    <h4>Les mesures de prévention</h4>
+    <ul class="bl">
+      <li>Utiliser de préférence un ordinateur administré par l’entreprise.</li>
+      <li>Maintenir les logiciels et le système d’exploitation à jour.</li>
+      <li>Utiliser les accès distants approuvés par l’organisation, avec une authentification forte.</li>
+      <li>Recourir au VPN lorsqu’il est prévu par la politique de sécurité.</li>
+      <li>Verrouiller sa session dès que l’on s’éloigne de son poste.</li>
+      <li>Éviter de transférer des fichiers professionnels vers des services personnels non autorisés.</li>
+      <li>Respecter les consignes relatives aux données confidentielles.</li>
+    </ul>
+    <h4>À quoi sert un VPN ?</h4>
+    <p>Un <b>VPN</b> (<i>Virtual Private Network</i>) crée un tunnel de communication protégé entre un appareil et un réseau ou service distant.</p>
+    <p>Il peut contribuer à protéger les échanges sur un réseau non fiable. Cependant, un VPN ne protège pas contre tous les risques : il n’empêche pas, à lui seul, le phishing, le vol de mot de passe ou l’installation d’un logiciel malveillant.</p>
+
+    <h3 class="sec" id="s2-3">2.3. Les supports amovibles</h3>
+    <p>Un <b>support amovible</b> est un équipement de stockage que l’on peut connecter ou retirer facilement.</p>
+    <h4>Exemples</h4>
+    <ul class="bl"><li>Clé USB.</li><li>Disque dur externe.</li><li>Carte mémoire.</li><li>Certains smartphones utilisés pour transférer des fichiers.</li></ul>
+    <h4>Quels sont les risques ?</h4>
+    <ul class="bl">
+      <li><b>Infection :</b> une clé contient un fichier malveillant.</li>
+      <li><b>Fuite de données :</b> un salarié copie des documents confidentiels sur un support personnel.</li>
+      <li><b>Perte ou vol :</b> le support disparaît sans protection suffisante.</li>
+      <li><b>Altération :</b> les fichiers sont modifiés ou supprimés.</li>
+      <li><b>Introduction de données non vérifiées :</b> un fichier récupéré à l’extérieur est utilisé sans contrôle.</li>
+    </ul>
+    <h4>Les bonnes pratiques</h4>
+    <ul class="bl">
+      <li>Utiliser uniquement les supports autorisés.</li>
+      <li>Ne pas connecter une clé USB inconnue.</li>
+      <li>Analyser les supports avec les outils de sécurité prévus.</li>
+      <li>Chiffrer les supports qui contiennent des données sensibles, selon la politique de l’entreprise.</li>
+      <li>Limiter les copies de données au strict nécessaire.</li>
+      <li>Signaler immédiatement la perte d’un support professionnel.</li>
+    </ul>
+    <div class="callout danger"><b>Situation d’examen</b><p>Un salarié trouve une clé USB dans le hall de son entreprise et la branche sur son poste pour identifier son propriétaire.</p><p>Le problème est qu’il introduit un support dont l’origine et le contenu ne sont pas vérifiés. Il devrait le remettre au service compétent sans le connecter à son poste.</p></div>
+  </section>
+
+  <!-- PARTIE 3 -->
+  <section class="part" id="p3">
+    <h2><span class="n">Partie 3</span>L’ingénierie sociale et le phishing</h2>
+    <div class="callout warn"><b>Partie essentielle</b><p>Cette partie est essentielle : elle porte sur des situations fréquemment utilisées dans les exercices de cybersécurité.</p></div>
+
+    <h3 class="sec" id="s3-1">3.1. Qu’est-ce que l’ingénierie sociale ?</h3>
+    <p>L’<b>ingénierie sociale</b> consiste à manipuler une personne afin qu’elle réalise une action favorable à l’attaquant.</p>
+    <p>L’attaquant ne cherche pas nécessairement à exploiter une faille technique. Il peut chercher à exploiter la confiance, la peur, la curiosité ou le sentiment d’urgence.</p>
+    <h4>Les principales techniques</h4>
+    <div class="cards">
+      <div class="card purple"><h4>Prétexting — faux prétexte</h4><p>L’attaquant invente une situation crédible pour obtenir une information ou une action.</p><p class="ex">Exemple : il se fait passer pour un technicien informatique.</p></div>
+      <div class="card red"><h4>Phishing — hameçonnage</h4><p>L’attaquant envoie un message trompeur pour inciter la victime à cliquer, communiquer des identifiants ou effectuer un paiement.</p></div>
+      <div class="card"><h4>Tailgating — intrusion par suivisme</h4><p>Une personne non autorisée profite de l’ouverture d’une porte par un employé pour entrer dans une zone sécurisée.</p></div>
+      <div class="card amber"><h4>Fraude au président</h4><p>Un fraudeur se fait passer pour un dirigeant ou un interlocuteur de confiance afin d’obtenir un virement ou une opération urgente.</p></div>
+    </div>
+
+    <h3 class="sec" id="s3-2">3.2. Définition du phishing</h3>
+    <div class="callout navy"><b>Définition</b><p>Le <b>phishing</b>, ou <b>hameçonnage</b>, est une technique de fraude dans laquelle un attaquant se fait passer pour un organisme ou une personne de confiance afin de tromper sa victime.</p></div>
+    <p>L’objectif peut être de :</p>
+    <ul class="bl">
+      <li>Voler des identifiants ou des mots de passe.</li><li>Obtenir des coordonnées bancaires.</li><li>Faire ouvrir une pièce jointe malveillante.</li><li>Faire installer un logiciel malveillant.</li><li>Déclencher un paiement frauduleux.</li><li>Accéder au système d’information de l’organisation.</li>
+    </ul>
+    <p>Le phishing peut arriver par courriel, SMS, téléphone ou messagerie instantanée. Le phishing par SMS est également appelé <b>smishing</b>.</p>
+
+    <h3 class="sec" id="s3-3">3.3. Anatomie d’un courriel de phishing</h3>
+    <h4>Exemple fictif de courriel frauduleux</h4>
+    <p class="noprint"><b>À vous de jouer :</b> cliquez sur les zones surlignées du message pour découvrir pourquoi elles sont suspectes.</p>
+    <div class="mail" id="mail">
+      <div class="ban">SIMULATION PÉDAGOGIQUE — NE PAS UTILISER COMME VRAI MESSAGE</div>
+      <div class="in">
+        <p><b>De :</b> <button class="hot" data-clue="sender">support-securite@entreprise-verification.example</button></p>
+        <p><b>Objet :</b> <button class="hot" data-clue="urgent"><b>URGENT — Votre compte sera bloqué dans 30 minutes</b></button></p>
+        <hr style="border:0;border-top:1px solid #d5dee8">
+        <p>Bonjour,</p>
+        <p>Une activité inhabituelle a été détectée sur votre compte professionnel.</p>
+        <p>Pour éviter sa désactivation, veuillez <button class="hot" data-clue="pwd">confirmer immédiatement votre mot de passe</button> en cliquant sur le lien ci-dessous.</p>
+        <p><button class="mbtn" data-clue="link" type="button" data-hot="1">Confirmer mon compte</button></p>
+        <p><button class="hot" data-clue="threat">Sans réponse immédiate, votre accès sera définitivement suspendu.</button></p>
+        <p>Le support informatique</p>
+      </div>
+    </div>
+    <div class="callout clue" id="clue" aria-live="polite"><b>Indice</b><p>Sélectionnez une zone du courriel ci-dessus.</p></div>
+
+    <h4>Comment reconnaître les indices suspects ?</h4>
+    <div class="tbl red"><table><thead><tr><th>Indice</th><th>Pourquoi est-ce suspect ?</th></tr></thead><tbody>
+      <tr><td>Urgence excessive</td><td>Le message pousse à agir sans réfléchir.</td></tr>
+      <tr><td>Menace de blocage</td><td>La peur peut conduire à une erreur.</td></tr>
+      <tr><td>Demande de mot de passe</td><td>Un service légitime ne devrait pas demander de communiquer son mot de passe par courriel.</td></tr>
+      <tr><td>Adresse d’expéditeur inhabituelle</td><td>Le domaine peut ne pas correspondre à l’organisation annoncée.</td></tr>
+      <tr><td>Lien non vérifié</td><td>Le lien peut conduire vers un faux site.</td></tr>
+      <tr><td>Formulation inhabituelle</td><td>Les erreurs ou expressions étranges peuvent être des indices.</td></tr>
+    </tbody></table></div>
+    <div class="callout danger"><b>Attention</b><p>Un message de phishing peut être parfaitement rédigé et provenir d’un compte légitime compromis. Aucun indice isolé ne permet toujours de conclure avec certitude.</p></div>
+
+    <h3 class="sec" id="s3-4">3.4. Comment vérifier un message suspect ?</h3>
+    <ol class="steps navy">
+      <li><div><b>Examiner l’expéditeur.</b>Vérifier le domaine réel de l’adresse, pas seulement le nom affiché.</div></li>
+      <li><div><b>Analyser le contexte.</b>Attendiez-vous ce message ? La demande est-elle cohérente avec votre activité ?</div></li>
+      <li><div><b>Vérifier le lien sans l’ouvrir.</b>Examiner l’adresse de destination, selon les outils disponibles. Un nom familier affiché dans le message ne garantit rien.</div></li>
+      <li><div><b>Se méfier des pièces jointes inattendues.</b>Ne pas les ouvrir tant que leur légitimité n’est pas vérifiée.</div></li>
+      <li><div><b>Confirmer par un autre canal.</b>Contacter l’expéditeur supposé au moyen d’un numéro ou d’une adresse déjà connus.</div></li>
+      <li><div><b>Signaler le message.</b>Utiliser la procédure prévue par l’organisation, puis supprimer ou isoler le message selon les consignes.</div></li>
+    </ol>
+
+    <h3 class="sec" id="s3-5">3.5. Que faire si l’on a cliqué sur un lien de phishing ?</h3>
+    <p>Cliquer sur un lien ne signifie pas nécessairement que le poste est compromis. La réaction dépend de ce qui s’est passé ensuite.</p>
+    <div class="tbl"><table><thead><tr><th>Situation</th><th>Réaction attendue</th></tr></thead><tbody>
+      <tr><td>Vous avez seulement ouvert le lien</td><td>Fermer la page et signaler l’incident conformément aux consignes internes.</td></tr>
+      <tr><td>Vous avez saisi votre mot de passe</td><td>Prévenir rapidement le support, faire réinitialiser le mot de passe depuis un appareil fiable et révoquer les sessions si nécessaire.</td></tr>
+      <tr><td>Vous avez validé une notification MFA inattendue</td><td>Prévenir immédiatement le service de sécurité.</td></tr>
+      <tr><td>Vous avez ouvert ou exécuté un fichier</td><td>Avertir le support sans attendre et suivre ses instructions. Ne pas tenter de supprimer soi-même les traces ou de réparer le poste sans coordination.</td></tr>
+      <tr><td>Un paiement a été effectué</td><td>Alerter immédiatement le service financier et la banque selon la procédure de l’organisation.</td></tr>
+    </tbody></table></div>
+    <div class="callout ok"><b>Réflexe professionnel</b><p>Signaler rapidement un incident, même si l’on pense avoir commis une erreur. Un signalement précoce peut limiter les conséquences.</p></div>
+
+    <h3 class="sec" id="p3-6">3.6. Les variantes du phishing</h3>
+    <p>Il existe de nombreuses variantes du phishing (hameçonnage). Les attaques peuvent passer par les courriels, les SMS, les appels téléphoniques ou les réseaux sociaux. Le <b>quishing</b>, qui exploite les QR codes, est une notion à connaître.</p>
+    <h4>Les principales variantes du phishing</h4>
+    <div class="tbl red"><table><thead><tr><th>Variante</th><th>Principe</th><th>Exemple</th></tr></thead><tbody>
+      <tr><td>1. Phishing<br><small>(hameçonnage par message)</small></td><td>Un faux message, par courriel, imite une banque, une administration ou un service informatique pour voler des identifiants ou pousser la victime à ouvrir une pièce jointe.</td><td>« Votre compte Microsoft sera suspendu. Cliquez ici. »</td></tr>
+      <tr><td>2. Quishing<br><small>(phishing par QR code) — <span style="color:var(--red)">à connaître</span></small></td><td>Le fraudeur utilise un QR code qui redirige vers un faux site ou une page malveillante.</td><td>Un faux QR code sur un avis de livraison demande de payer des frais ou de saisir ses coordonnées bancaires.</td></tr>
+      <tr><td>3. Smishing<br><small>(phishing par SMS)</small></td><td>L’attaquant envoie un SMS frauduleux qui pousse à cliquer sur un lien ou à fournir des informations.</td><td>« Votre colis est bloqué. Réglez 1,99 € pour le recevoir. »</td></tr>
+      <tr><td>4. Vishing<br><small>(phishing vocal)</small></td><td>Le fraudeur téléphone en se faisant passer pour un conseiller bancaire, un technicien ou un agent d’une administration.</td><td>« Je suis du support informatique. Donnez-moi votre code de connexion pour débloquer votre compte. »</td></tr>
+      <tr><td>5. Spear phishing<br><small>(phishing ciblé)</small></td><td>Le message est personnalisé pour une personne ou une organisation précise.</td><td>Un salarié reçoit un faux courriel qui reprend le nom de son responsable et un projet réel.</td></tr>
+      <tr><td>6. Whaling<br><small>(phishing visant les dirigeants)</small></td><td>Attaque ciblée contre un dirigeant ou une personne disposant d’un niveau élevé de responsabilité.</td><td>Un faux message demande au directeur financier de réaliser un virement confidentiel urgent.</td></tr>
+      <tr><td>7. Angler phishing<br><small>(réseaux sociaux)</small></td><td>Le fraudeur se fait passer pour un service client ou une marque sur un réseau social.</td><td>Un faux compte d’assistance demande des identifiants par message privé.</td></tr>
+      <tr><td>8. Clone phishing<br><small>(phishing par clonage)</small></td><td>Un message légitime est copié puis modifié pour remplacer un lien ou une pièce jointe par un élément malveillant.</td><td>Un faux courriel reprend un échange réel avec un lien de partage de document frauduleux.</td></tr>
+    </tbody></table></div>
+    <h4>Autres termes utiles en cybersécurité</h4>
+    <div class="tbl teal"><table><thead><tr><th>Terme</th><th>Principe</th><th>Exemple</th></tr></thead><tbody>
+      <tr><td>BEC (Business Email Compromise)</td><td>Compromission ou usurpation d’une messagerie professionnelle pour frauder.</td><td>Faux changement de RIB d’un fournisseur.</td></tr>
+      <tr><td>Consent phishing</td><td>Tromper la victime pour qu’elle autorise une application à accéder à ses données.</td><td>Fausse demande d’autorisation d’accès à Microsoft 365.</td></tr>
+      <tr><td>Pharming</td><td>Redirection vers un faux site, parfois à la suite d’une compromission technique.</td><td>L’utilisateur arrive sur un faux site bancaire.</td></tr>
+      <tr><td>Search engine phishing</td><td>Utilisation de faux sites ou de publicités frauduleuses dans les résultats de recherche.</td><td>Une fausse page de connexion apparaît dans une annonce sponsorisée.</td></tr>
+    </tbody></table></div>
+    <p>Ces techniques sont apparentées au phishing, mais ne désignent pas toutes exactement le même mécanisme.</p>
+    <div class="callout"><b>Pour approfondir</b><p>Cybermalveillance.gouv.fr : <i>Le quishing, l’hameçonnage par QR code</i> ; CyberDico de l’ANSSI.</p></div>
+    <h4>Le mémo à donner aux étudiants</h4>
+    <p>Le canal permet de mémoriser les variantes :</p>
+    <div class="tbl"><table><thead><tr><th>Canal / cible</th><th>Variante</th></tr></thead><tbody>
+      <tr><td>Courriel</td><td>→ Phishing</td></tr><tr><td>SMS</td><td>→ Smishing</td></tr><tr><td>Appel téléphonique</td><td>→ Vishing</td></tr><tr><td>QR code</td><td>→ Quishing</td></tr>
+      <tr><td>Cible précisément choisie</td><td>→ Spear phishing</td></tr><tr><td>Dirigeant ciblé</td><td>→ Whaling</td></tr><tr><td>Faux support sur les réseaux sociaux</td><td>→ Angler phishing</td></tr>
+    </tbody></table></div>
+    <div class="callout danger"><b>Attention</b><p>Plusieurs variantes peuvent être combinées dans une même attaque.</p></div>
+    <h4>À apprendre en priorité pour le BTS SIO</h4>
+    <p>Phishing, smishing, vishing, quishing, spear phishing et BEC : pour chacun, retenir un exemple, un risque et une mesure de protection.</p>
+    <div class="tbl"><table><thead><tr><th>Variante</th><th>Exemple</th><th>Risque</th><th>Mesure de protection</th></tr></thead><tbody>
+      <tr><td>Phishing</td><td>Faux courriel « compte suspendu ».</td><td>Vol d’identifiants.</td><td>Vérifier l’expéditeur et le lien, activer le MFA, signaler le message.</td></tr>
+      <tr><td>Smishing</td><td>SMS « colis bloqué, réglez 1,99 € ».</td><td>Vol de coordonnées bancaires.</td><td>Ne pas cliquer, passer par le site ou l’application officiels, signaler.</td></tr>
+      <tr><td>Vishing</td><td>Faux support informatique qui demande un code de connexion.</td><td>Prise de contrôle d’un compte.</td><td>Ne jamais communiquer un code, raccrocher et rappeler un numéro officiel.</td></tr>
+      <tr><td>Quishing</td><td>Faux QR code sur un avis de livraison.</td><td>Redirection vers un faux site, vol de données ou de paiement.</td><td>Ne pas scanner un QR code inattendu, vérifier l’adresse affichée avant d’ouvrir.</td></tr>
+      <tr><td>Spear phishing</td><td>Faux courriel reprenant le nom d’un responsable et un projet réel.</td><td>Compromission ciblée d’un salarié ou d’une organisation.</td><td>Vérifier la demande par un canal indépendant, sensibiliser les utilisateurs.</td></tr>
+      <tr><td>BEC</td><td>Faux changement de RIB d’un fournisseur.</td><td>Virement frauduleux.</td><td>Double validation des changements bancaires, confirmation auprès d’un contact connu.</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <!-- PARTIE 4 -->
+  <section class="part" id="p4">
+    <h2><span class="n">Partie 4</span>La charte informatique et la politique d’usage acceptable</h2>
+    <h3 class="sec" id="s4-1">4.1. Qu’est-ce qu’une charte informatique ?</h3>
+    <p>Une <b>charte informatique</b> est un document qui définit les règles d’utilisation des ressources numériques d’une organisation.</p>
+    <p>Elle peut concerner :</p>
+    <ul class="bl"><li>Les ordinateurs et smartphones professionnels.</li><li>Les comptes et mots de passe.</li><li>La messagerie et la navigation Internet.</li><li>Les outils collaboratifs et le stockage de fichiers.</li><li>Le télétravail et les supports amovibles.</li><li>Le signalement des incidents.</li><li>Les usages autorisés et interdits.</li></ul>
+    <p>Elle permet de préciser les comportements attendus des utilisateurs et leurs responsabilités.</p>
+
+    <h3 class="sec" id="s4-2">4.2. Qu’est-ce qu’une politique d’usage acceptable ?</h3>
+    <p>La <b>politique d’usage acceptable</b> décrit les usages permis, limités ou interdits des équipements et services informatiques.</p>
+    <p>Par exemple :</p>
+    <div class="tbl teal"><table><thead><tr><th>Usage</th><th>Exemple de règle</th></tr></thead><tbody>
+      <tr><td>Messagerie</td><td>Ne pas transmettre de données confidentielles à un destinataire non autorisé.</td></tr>
+      <tr><td>Mots de passe</td><td>Ne jamais communiquer son mot de passe à un collègue.</td></tr>
+      <tr><td>Télétravail</td><td>Utiliser les accès distants approuvés par l’entreprise.</td></tr>
+      <tr><td>Clés USB</td><td>N’utiliser que les supports autorisés.</td></tr>
+      <tr><td>Phishing</td><td>Signaler les messages suspects au service compétent.</td></tr>
+      <tr><td>Logiciels</td><td>Ne pas installer de logiciels sans autorisation lorsque celle-ci est requise.</td></tr>
+      <tr><td>Données</td><td>Ne pas copier des documents professionnels vers un espace personnel non autorisé.</td></tr>
+    </tbody></table></div>
+    <p>Une charte et une politique d’usage peuvent être réunies dans un même document. Leur organisation exacte dépend de l’entreprise.</p>
+
+    <h3 class="sec" id="s4-3">4.3. Comment analyser une charte lors de l’examen ?</h3>
+    <p>Prenons cet extrait fictif :</p>
+    <div class="example" style="border-style:solid;border-color:var(--head)"><b style="color:var(--head)">Document 1 — Extrait de charte informatique</b>
+      <p><b>Entreprise fictive : ABC Services</b></p>
+      <ul class="bl"><li>Les salariés peuvent utiliser leur smartphone personnel pour consulter leurs courriels professionnels.</li><li>Les utilisateurs doivent protéger leurs identifiants.</li><li>Les clés USB personnelles sont autorisées sans contrôle particulier.</li><li>Les messages suspects doivent être signalés au support informatique.</li><li>Aucun dispositif spécifique n’est prévu pour la connexion à distance.</li></ul></div>
+    <h4>Analyse des écarts</h4>
+    <div class="tbl"><table><thead><tr><th>Règle ou situation</th><th>Problème identifié</th><th>Recommandation</th></tr></thead><tbody>
+      <tr><td>BYOD autorisé sans conditions précisées</td><td>Risque de fuite de données ou d’accès non autorisé</td><td>Définir les conditions de sécurité du BYOD.</td></tr>
+      <tr><td>Clés USB personnelles sans contrôle</td><td>Introduction possible de fichiers malveillants et fuite de données</td><td>Limiter les supports autorisés et prévoir des contrôles adaptés.</td></tr>
+      <tr><td>Connexion distante sans dispositif précisé</td><td>Accès potentiellement insuffisamment protégé</td><td>Définir une procédure d’accès distant sécurisé, avec authentification forte.</td></tr>
+      <tr><td>Signalement des messages suspects</td><td>Bonne pratique déjà présente</td><td>Maintenir la règle et sensibiliser les utilisateurs.</td></tr>
+    </tbody></table></div>
+    <div class="callout danger"><b>Attention</b><p>L’absence d’une règle dans un extrait ne prouve pas forcément que toute l’entreprise est dépourvue de mesures de sécurité. Il faut rester dans le périmètre du document analysé.</p></div>
+  </section>
+
+  <!-- PARTIE 5 -->
+  <section class="part" id="p5">
+    <h2><span class="n">Partie 5</span>Étude de cas type BTS SIO</h2>
+    <h3 class="sec" id="s5-1">Contexte : l’entreprise NovaCom</h3>
+    <p>NovaCom est une PME de 80 salariés. Plusieurs employés télétravaillent deux jours par semaine. L’entreprise autorise l’utilisation des smartphones personnels pour consulter la messagerie professionnelle.</p>
+    <p>Un lundi matin, le service informatique reçoit les informations suivantes :</p>
+    <div class="incident"><b>INCIDENT A — PHISHING</b><div>Une comptable reçoit un message prétendument envoyé par Microsoft. Le message indique que son compte sera suspendu si elle ne confirme pas son mot de passe.</div></div>
+    <div class="incident b"><b>INCIDENT B — BYOD</b><div>Un commercial perd son smartphone personnel sur lequel sa messagerie professionnelle est connectée.</div></div>
+    <div class="incident c"><b>INCIDENT C — SUPPORT AMOVIBLE</b><div>Un salarié branche une clé USB trouvée dans une salle de réunion pour récupérer un document qui pourrait intéresser son équipe.</div></div>
+
+    <h3 class="sec" id="s5-2">Questions (QCM)</h3>
+    <div id="qcm"></div>
+    <p class="noprint"><button class="btn" id="qcm-ok" type="button">✔ Valider mes réponses</button> <button class="btn alt" id="qcm-reset" type="button">↻ Recommencer</button><span class="score" id="score" aria-live="polite"></span></p>
+
+    <h3 class="sec" id="s5-3">Corrigé rédigé — Méthode attendue à l’examen</h3>
+    <p>Pour chaque situation, utilisez la structure suivante :</p>
+    <p><b>D’après le document…</b> → <b>Problème</b> → <b>Risque</b> → <b>Principe de sécurité</b> → <b>Solution</b> → <b>Bénéfice</b>.</p>
+    <h4>Exemple de réponse : incident A</h4>
+    <div class="callout ok"><b>Réponse modèle</b>
+      <p>D’après le document, la comptable reçoit un courriel qui menace de suspendre son compte et lui demande de confirmer son mot de passe. Cette situation présente les caractéristiques d’une tentative de phishing.</p>
+      <p>Le principal risque est le vol de ses identifiants, qui pourrait permettre à un attaquant d’accéder à la messagerie et aux informations professionnelles. Le principe de sécurité à appliquer est la protection des moyens d’authentification et la vérification de l’origine des demandes.</p>
+      <p>Il faut éviter de cliquer sur le lien, vérifier la demande par un canal indépendant et signaler le message au support informatique. Cette mesure réduit le risque de compromission du compte et permet à l’entreprise de prendre les mesures de protection nécessaires.</p></div>
+    <p>Les propositions de corrigé des incidents B et C sont disponibles dans l’onglet <a href="#annexes/a-corriges">Annexes</a>.</p>
+  </section>
+
+  <!-- PARTIE 6 -->
+  <section class="part" id="p6">
+    <h2><span class="n">Partie 6</span>Synthèse à mémoriser</h2>
+    <div class="tbl"><table><thead><tr><th>Notion</th><th>Définition essentielle</th></tr></thead><tbody>
+      <tr><td>BYOD</td><td>Utilisation d’un appareil personnel pour accéder aux ressources professionnelles.</td></tr>
+      <tr><td>Télétravail</td><td>Activité professionnelle effectuée à distance des locaux de l’entreprise.</td></tr>
+      <tr><td>Support amovible</td><td>Support de stockage facilement connectable et retirable, comme une clé USB.</td></tr>
+      <tr><td>Ingénierie sociale</td><td>Manipulation d’une personne pour obtenir une information ou une action.</td></tr>
+      <tr><td>Phishing</td><td>Tromperie visant notamment à voler des identifiants, des données ou de l’argent.</td></tr>
+      <tr><td>Charte informatique</td><td>Document qui définit les règles d’utilisation des ressources numériques.</td></tr>
+      <tr><td>VPN</td><td>Tunnel de communication protégé pour accéder à un réseau ou service distant.</td></tr>
+      <tr><td>MFA</td><td>Authentification reposant sur plusieurs facteurs distincts.</td></tr>
+      <tr><td>Confidentialité</td><td>Protection des informations contre les accès non autorisés.</td></tr>
+      <tr><td>Intégrité</td><td>Protection contre les modifications non autorisées.</td></tr>
+      <tr><td>Disponibilité</td><td>Accès aux ressources par les personnes autorisées lorsqu’elles en ont besoin.</td></tr>
+    </tbody></table></div>
+    <h3 class="sec" id="s6-1">Les cinq réflexes à retenir</h3>
+    <ol class="steps green">
+      <li><div>Ne jamais communiquer son mot de passe à la suite d’une demande reçue par courriel.</div></li>
+      <li><div>Vérifier une demande inhabituelle par un canal indépendant.</div></li>
+      <li><div>Ne jamais connecter un support USB dont l’origine est inconnue.</div></li>
+      <li><div>Respecter les règles de sécurité du télétravail et du BYOD.</div></li>
+      <li><div>Signaler rapidement toute perte, tout message suspect ou tout incident.</div></li>
+    </ol>
+    <h3 class="sec" id="s6-2">Bilan de la séance</h3>
+    <p>L’utilisateur est un acteur essentiel de la cybersécurité. Le BYOD, le télétravail et les supports amovibles apportent de la souplesse, mais créent des risques qui doivent être encadrés. L’ingénierie sociale, notamment le phishing, exploite les comportements humains pour contourner les protections techniques.</p>
+    <p>La sécurité repose donc sur trois leviers complémentaires : <b>la sensibilisation des utilisateurs, les mesures techniques et les règles organisationnelles</b>.</p>
+    <div class="callout"><b>Préparation à la séance 2</b><p>Sensibilisation et défenses techniques — MFA, antivirus, EDR et bonnes pratiques de protection des postes.</p></div>
+    <p class="noprint"><a class="btn navy" href="#seance2">Voir la séance 2 →</a></p>
+  </section>
+</div>
+
+<!-- ============ SÉANCE 2 ============ -->
+<div class="tab" id="tab-seance2" hidden>
+  <section class="hero">
+    <div class="kick">BTS SIO SISR — Thème 3, Séance 2</div>
+    <h1>Sensibilisation et défenses techniques</h1>
+    <p>Cette séance sera publiée prochainement.</p>
+  </section>
+  <section class="part sec" id="s2-preview">
+    <h2>Au programme</h2>
+    <p>Préparation à la séance 2 : sensibilisation et défenses techniques — MFA, antivirus, EDR et bonnes pratiques de protection des postes.</p>
+    <p class="noprint"><a class="btn" href="#seance1">← Revenir à la séance 1</a></p>
+  </section>
+</div>
+
+<!-- ============ ANNEXES ============ -->
+<div class="tab" id="tab-annexes" hidden>
+  <section class="hero"><div class="kick">Ressources complémentaires</div><h1>Annexes</h1><p>Mémos, méthode d’examen, propositions de corrigé et ressources officielles.</p></section>
+
+  <section class="part sec" id="a-memo">
+    <h2><span class="n">Annexe A</span>Mémo : le canal fait la variante</h2>
+    <div class="cards">
+      <div class="card"><h4>Courriel</h4><p>Phishing</p></div>
+      <div class="card"><h4>SMS</h4><p>Smishing</p></div>
+      <div class="card"><h4>Appel téléphonique</h4><p>Vishing</p></div>
+      <div class="card"><h4>QR code</h4><p>Quishing</p></div>
+      <div class="card amber"><h4>Cible précisément choisie</h4><p>Spear phishing</p></div>
+      <div class="card amber"><h4>Dirigeant ciblé</h4><p>Whaling</p></div>
+      <div class="card purple"><h4>Faux support sur les réseaux sociaux</h4><p>Angler phishing</p></div>
+    </div>
+    <div class="callout danger"><b>Attention</b><p>Plusieurs variantes peuvent être combinées dans une même attaque.</p></div>
+  </section>
+
+  <section class="part sec" id="a-methode">
+    <h2><span class="n">Annexe B</span>Méthode de réponse à l’examen</h2>
+    <p>Pour chaque situation, utilisez la structure suivante :</p>
+    <ol class="steps navy">
+      <li><div><b>D’après le document…</b>Citez les éléments du document qui décrivent la situation.</div></li>
+      <li><div><b>Problème</b>Nommez le problème identifié.</div></li>
+      <li><div><b>Risque</b>Précisez le risque et l’objectif de sécurité menacé (confidentialité, intégrité, disponibilité).</div></li>
+      <li><div><b>Principe de sécurité</b>Indiquez le principe à appliquer.</div></li>
+      <li><div><b>Solution</b>Proposez des mesures concrètes et adaptées.</div></li>
+      <li><div><b>Bénéfice</b>Expliquez ce que la mesure apporte.</div></li>
+    </ol>
+    <div class="callout danger"><b>Attention</b><p>Il faut rester dans le périmètre du document analysé : l’absence d’une règle dans un extrait ne prouve pas que toute l’entreprise est dépourvue de mesures de sécurité.</p></div>
+  </section>
+
+  <section class="part sec" id="a-corriges">
+    <h2><span class="n">Annexe C</span>Corrigés de l’étude de cas NovaCom</h2>
+    <h3>Corrigé du QCM</h3>
+    <div class="tbl"><table><thead><tr><th>Question</th><th>Bonne réponse</th></tr></thead><tbody>
+      <tr><td>1. Principal risque de l’incident A</td><td>Le vol d’identifiants par phishing</td></tr>
+      <tr><td>2. Mesure adaptée à l’incident B</td><td>Alerter le support et appliquer la procédure de révocation des accès</td></tr>
+      <tr><td>3. Que devait faire le salarié face à la clé USB inconnue ?</td><td>La remettre au service compétent sans la connecter</td></tr>
+      <tr><td>4. Mesure qui réduit le risque lié au BYOD</td><td>Définir des exigences de sécurité et limiter les accès</td></tr>
+      <tr><td>5. Utilité d’une charte informatique</td><td>Elle définit les règles et comportements attendus</td></tr>
+    </tbody></table></div>
+    <h3>Incident A — phishing (réponse modèle du cours)</h3>
+    <p>D’après le document, la comptable reçoit un courriel qui menace de suspendre son compte et lui demande de confirmer son mot de passe. Il s’agit d’une tentative de phishing. Le principal risque est le vol de ses identifiants. Il faut éviter de cliquer sur le lien, vérifier la demande par un canal indépendant et signaler le message au support informatique, ce qui réduit le risque de compromission du compte.</p>
+    <h3>Incident B — BYOD (proposition de corrigé)</h3>
+    <div class="callout ok"><b>Proposition</b>
+      <p>D’après le document, un commercial perd son smartphone personnel sur lequel sa messagerie professionnelle est connectée. Le problème est la perte d’un appareil personnel donnant accès à des ressources de l’entreprise.</p>
+      <p>Le risque est un accès non autorisé aux courriels et aux données professionnelles, c’est-à-dire une atteinte à la confidentialité. Le principe de sécurité est la maîtrise des accès, y compris depuis des appareils personnels encadrés par une politique BYOD.</p>
+      <p>Il faut alerter immédiatement le support, appliquer la procédure de révocation des accès et des sessions, et faire réinitialiser le mot de passe. Cette réaction limite le temps pendant lequel les données restent exposées. À plus long terme, l’entreprise peut imposer le verrouillage de l’appareil, le MFA et, si c’est adapté, une solution de gestion des appareils mobiles.</p></div>
+    <h3>Incident C — support amovible (proposition de corrigé)</h3>
+    <div class="callout ok"><b>Proposition</b>
+      <p>D’après le document, un salarié branche une clé USB trouvée dans une salle de réunion. Le problème est l’introduction d’un support dont l’origine et le contenu ne sont pas vérifiés.</p>
+      <p>Le risque est l’infection du poste par un fichier malveillant, avec une possible propagation au réseau et une atteinte à la confidentialité, à l’intégrité ou à la disponibilité. Le principe de sécurité est de n’utiliser que des supports autorisés et vérifiés.</p>
+      <p>Il fallait remettre la clé au service compétent sans la connecter. Si elle a déjà été branchée, le salarié doit prévenir le support sans attendre et suivre ses instructions, sans tenter de réparer le poste seul. Cette mesure évite l’introduction d’un code malveillant dans le système d’information.</p></div>
+    <p class="noprint"><a class="btn" href="#telechargements">⬇ Télécharger les corrections en PDF</a></p>
+  </section>
+
+  <section class="part sec" id="a-ressources">
+    <h2><span class="n">Annexe D</span>Pour approfondir</h2>
+    <ul class="bl">
+      <li><a href="https://www.cybermalveillance.gouv.fr" target="_blank" rel="noopener noreferrer">Cybermalveillance.gouv.fr</a> — dont la fiche sur le quishing, l’hameçonnage par QR code.</li>
+      <li><a href="https://cyber.gouv.fr" target="_blank" rel="noopener noreferrer">ANSSI</a> — dont le CyberDico.</li>
+    </ul>
+  </section>
+</div>
+
+<!-- ============ FAQ ============ -->
+<div class="tab" id="tab-faq" hidden>
+  <section class="hero"><div class="kick">Questions fréquentes</div><h1>FAQ</h1><p>Les réponses aux questions que l’on se pose le plus souvent sur cette séance.</p></section>
+  <div id="faq-list"></div>
+</div>
+
+<!-- ============ TÉLÉCHARGEMENTS ============ -->
+<div class="tab" id="tab-telechargements" hidden>
+  <section class="hero"><div class="kick">Documents</div><h1>Téléchargements</h1><p>Le fascicule de cours et les corrections, au format PDF.</p></section>
+  <div class="dl">
+    <div class="dlc sec" id="dl-cours"><div class="big">📕</div><h3>Fascicule de cours</h3><p>Séance 1 complète : cours, variantes du phishing, étude de cas, QCM et synthèse.</p><a class="btn" href="pdf/BTS-SIO-SISR_Theme3_Seance1_Fascicule.pdf" download>⬇ Télécharger le fascicule (PDF)</a></div>
+    <div class="dlc sec" id="dl-corr"><div class="big">✅</div><h3>Corrections</h3><p>Corrigé du QCM, corrigés rédigés des incidents A, B et C et analyse des écarts de la charte ABC Services.</p><a class="btn" href="pdf/BTS-SIO-SISR_Theme3_Seance1_Corrections.pdf" download>⬇ Télécharger les corrections (PDF)</a></div>
+  </div>
+</div>
+
+</div>
+<footer>
+  <div>© by <b>Twagirumukiza</b> — Support de cours BTS SIO SISR</div>
+  <div class="links">
+    <a href="https://www.linkedin.com/in/innocent-twagirumukiza" target="_blank" rel="noopener noreferrer">in&nbsp; LinkedIn</a>
+    <a href="https://twagirumukiza.github.io/Twagirumukiza-Innocent/" target="_blank" rel="noopener noreferrer">🌐 Mon site</a>
+  </div>
+</footer>
+</main>
+
+<button class="totop" id="totop" aria-label="Retour en haut">↑</button>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var body=document.body, root=document.documentElement;
+var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+var mobile=function(){return window.matchMedia("(max-width:900px)").matches};
+
+/* ---- theme ---- */
+function setTheme(t){root.setAttribute("data-theme",t);$("#theme").textContent=t==="dark"?"☀️":"🌙";var m=$('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="dark"?"#0a1220":"#14284b")}
+var savedT=store.get("theme");
+setTheme(savedT||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"));
+$("#theme").addEventListener("click",function(){var t=root.getAttribute("data-theme")==="dark"?"light":"dark";setTheme(t);store.set("theme",t)});
+
+/* ---- font size ---- */
+var fs=parseInt(store.get("fs")||"100",10);if(isNaN(fs)||fs<80||fs>160)fs=100;
+function setFs(v){fs=Math.max(80,Math.min(160,v));root.style.setProperty("--fs",fs+"%");store.set("fs",String(fs))}
+setFs(fs);
+$("#finc").addEventListener("click",function(){setFs(fs+10)});
+$("#fdec").addEventListener("click",function(){setFs(fs-10)});
+
+/* ---- menu ---- */
+if(store.get("collapsed")==="1"&&!mobile())body.classList.add("collapsed");
+var burger=$("#burger");
+function syncAria(){burger.setAttribute("aria-expanded",String(mobile()?body.classList.contains("open"):!body.classList.contains("collapsed")))}
+burger.addEventListener("click",function(){
+  if(mobile()){body.classList.toggle("open")}
+  else{body.classList.toggle("collapsed");store.set("collapsed",body.classList.contains("collapsed")?"1":"0")}
+  syncAria();
+});
+$("#overlay").addEventListener("click",function(){body.classList.remove("open");syncAria()});
+window.addEventListener("resize",function(){if(!mobile())body.classList.remove("open");syncAria()});
+syncAria();
+
+/* ---- routing ---- */
+var tabs=$$(".tab"), navs=$$(".nav-i");
+function route(){
+  var h=decodeURIComponent((location.hash||"#presentation").slice(1)).split("/");
+  var tab=h[0],anchor=h[1]||"";
+  if(!document.getElementById("tab-"+tab)){tab="presentation";anchor=""}
+  tabs.forEach(function(t){t.hidden=(t.id!=="tab-"+tab)});
+  navs.forEach(function(n){n.classList.toggle("active",n.dataset.tab===tab)});
+  $("#sub-seance1").style.display="";
+  body.classList.remove("open");syncAria();
+  var target=anchor&&document.getElementById(anchor);
+  if(target){
+    if(target.tagName==="DETAILS")target.open=true;
+    setTimeout(function(){target.scrollIntoView({behavior:"smooth",block:"start"})},30);
+  }else{window.scrollTo(0,0)}
+  document.title=(tab==="presentation"?"":$("#tab-"+tab+" h1").textContent+" · ")+"BTS SIO SISR — Thème 3, Séance 1";
+  spy();
+}
+window.addEventListener("hashchange",route);
+
+/* ---- scroll: progress, spy, totop ---- */
+var subLinks=$$("#sub-seance1 a");
+function spy(){
+  var d=document.documentElement,max=d.scrollHeight-window.innerHeight;
+  $("#progress").style.width=(max>0?Math.min(100,window.scrollY/max*100):0)+"%";
+  $("#totop").classList.toggle("on",window.scrollY>500);
+  if($("#tab-seance1").hidden){subLinks.forEach(function(a){a.classList.remove("on")});return}
+  var cur=null;
+  $$("#tab-seance1 section.part").forEach(function(s){if(s.getBoundingClientRect().top<=110)cur=s.id});
+  var sub=null;
+  var s36=document.getElementById("p3-6");
+  if(cur==="p3"&&s36&&s36.getBoundingClientRect().top<=110)sub="p3-6";
+  subLinks.forEach(function(a){a.classList.toggle("on",a.dataset.a===(sub||cur))});
+}
+var tick=false;
+window.addEventListener("scroll",function(){if(!tick){tick=true;requestAnimationFrame(function(){spy();tick=false})}},{passive:true});
+$("#totop").addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})});
+
+/* ---- phishing mail clues ---- */
+var CLUES={
+ sender:["Adresse d’expéditeur inhabituelle","Le domaine ne correspond pas à l’organisation annoncée. Il faut vérifier le domaine réel de l’adresse, pas seulement le nom affiché."],
+ urgent:["Urgence excessive","L’objet impose un délai très court (30 minutes) pour pousser à agir sans réfléchir."],
+ pwd:["Demande de mot de passe","Un service légitime ne devrait pas demander de communiquer son mot de passe par courriel."],
+ link:["Lien non vérifié","Le bouton peut conduire vers un faux site. Il faut examiner l’adresse de destination sans l’ouvrir, ou confirmer par un autre canal."],
+ threat:["Menace de blocage","La peur d’une suspension définitive peut conduire à une erreur. C’est un levier classique de l’ingénierie sociale."]
+};
+$$("#mail [data-clue]").forEach(function(b){
+  b.addEventListener("click",function(){
+    $$("#mail .hot,#mail .mbtn").forEach(function(x){x.classList.remove("sel")});
+    b.classList.add("sel");
+    var c=CLUES[b.dataset.clue];
+    $("#clue").innerHTML="<b>Indice : "+c[0]+"</b><p>"+c[1]+"</p>";
+  });
+});
+
+/* ---- QCM ---- */
+var QCM=[
+ {q:"Quel est le principal risque de l’incident A ?",o:["Une panne matérielle","Le vol d’identifiants par phishing","Une coupure électrique"],a:1,e:"Le message menace de suspendre le compte et demande le mot de passe : c’est une tentative de phishing."},
+ {q:"Quelle mesure est adaptée à l’incident B ?",o:["Attendre que le téléphone soit retrouvé","Alerter le support et appliquer la procédure de révocation des accès","Publier un message sur les réseaux sociaux"],a:1,e:"Il faut limiter rapidement l’exposition des données en révoquant les accès liés à l’appareil perdu."},
+ {q:"Que devait faire le salarié face à la clé USB inconnue ?",o:["La brancher sur son ordinateur","La remettre au service compétent sans la connecter","Copier tous les fichiers"],a:1,e:"L’origine et le contenu de la clé ne sont pas vérifiés : la connecter expose le poste à une infection."},
+ {q:"Quelle mesure réduit le risque lié au BYOD ?",o:["Autoriser tous les appareils sans condition","Définir des exigences de sécurité et limiter les accès","Partager les mots de passe entre collègues"],a:1,e:"Une politique écrite, des exigences de sécurité et des accès limités encadrent le risque."},
+ {q:"Pourquoi une charte informatique est-elle utile ?",o:["Elle remplace tous les outils de sécurité","Elle définit les règles et comportements attendus","Elle empêche toute attaque"],a:1,e:"Elle précise les règles d’utilisation et les responsabilités ; elle complète les mesures techniques sans les remplacer."}
+];
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+function renderQcm(){
+  var box=$("#qcm");box.innerHTML="";
+  QCM.forEach(function(it,i){
+    var opts=shuffle(it.o.map(function(t,k){return{t:t,ok:k===it.a}}));
+    var f=document.createElement("fieldset");f.className="q";
+    f.innerHTML="<legend>"+(i+1)+". "+it.q+"</legend>"+opts.map(function(o){return '<label class="opt" data-ok="'+(o.ok?1:0)+'"><input type="radio" name="q'+i+'"><span>'+o.t+"</span></label>"}).join("")+'<p class="exp" hidden><b></b> '+it.e+"</p>";
+    box.appendChild(f);
+  });
+  $("#score").textContent="";
+}
+$("#qcm-ok").addEventListener("click",function(){
+  var n=0;
+  $$("#qcm fieldset").forEach(function(f){
+    var good=false;
+    $$("label.opt",f).forEach(function(l){
+      var inp=$("input",l);inp.disabled=true;
+      if(l.dataset.ok==="1")l.classList.add("good");
+      else if(inp.checked)l.classList.add("bad");
+      if(inp.checked&&l.dataset.ok==="1")good=true;
+    });
+    if(good)n++;
+    var e=$(".exp",f);e.hidden=false;$("b",e).textContent=good?"✔ Exact.":"✘ À revoir.";
+  });
+  $("#score").textContent=n+" / "+QCM.length+" bonnes réponses";
+});
+$("#qcm-reset").addEventListener("click",renderQcm);
+renderQcm();
+
+/* ---- FAQ ---- */
+var FAQ=[
+ ["Qu’est-ce que le BYOD, et est-ce forcément dangereux ?","<p>Le BYOD (<i>Bring Your Own Device</i>) consiste à utiliser son équipement personnel pour accéder aux ressources de l’organisation. Utiliser son téléphone personnel ne signifie pas automatiquement que le BYOD est interdit ou dangereux : le risque dépend des accès accordés, de la sécurité de l’appareil et des règles mises en place.</p>"],
+ ["Un VPN suffit-il à sécuriser le télétravail ?","<p>Non. Un VPN peut contribuer à protéger les échanges sur un réseau non fiable, mais il n’empêche pas, à lui seul, le phishing, le vol de mot de passe ou l’installation d’un logiciel malveillant.</p>"],
+ ["Que faire si j’ai cliqué sur un lien de phishing ?","<p>Cliquer ne signifie pas nécessairement que le poste est compromis. Si vous avez seulement ouvert le lien, fermez la page et signalez l’incident. Si vous avez saisi votre mot de passe, prévenez rapidement le support. Si vous avez ouvert un fichier, avertissez le support sans attendre. Dans tous les cas, signalez rapidement : un signalement précoce peut limiter les conséquences. Le détail figure en <a href=\"#seance1/s3-5\">section 3.5</a>.</p>"],
+ ["Comment savoir si un message est du phishing ?","<p>Aucun indice isolé ne permet toujours de conclure avec certitude : un message peut être parfaitement rédigé et provenir d’un compte légitime compromis. Examinez l’expéditeur, le contexte, le lien sans l’ouvrir et les pièces jointes, puis confirmez par un autre canal et signalez. Voir la <a href=\"#seance1/s3-4\">section 3.4</a>.</p>"],
+ ["Quelle est la différence entre phishing, spear phishing et whaling ?","<p>Le phishing est un message trompeur envoyé de façon générale. Le spear phishing est personnalisé pour une personne ou une organisation précise. Le whaling est une attaque ciblée contre un dirigeant ou une personne disposant d’un niveau élevé de responsabilité.</p>"],
+ ["Comment retenir les variantes du phishing ?","<p>Par le canal : courriel → phishing, SMS → smishing, appel téléphonique → vishing, QR code → quishing, cible précisément choisie → spear phishing, dirigeant ciblé → whaling, faux support sur les réseaux sociaux → angler phishing. Plusieurs variantes peuvent être combinées dans une même attaque. Voir la <a href=\"#seance1/p3-6\">section 3.6</a>.</p>"],
+ ["Que faut-il apprendre en priorité pour le BTS SIO ?","<p>Le phishing, le smishing, le vishing, le quishing, le spear phishing et le BEC, avec pour chacun un exemple, un risque et une mesure de protection.</p>"],
+ ["Quelle différence entre une charte informatique et une politique d’usage acceptable ?","<p>La charte définit les règles d’utilisation des ressources numériques et les responsabilités des utilisateurs. La politique d’usage acceptable décrit les usages permis, limités ou interdits. Les deux peuvent être réunies dans un même document ; leur organisation exacte dépend de l’entreprise.</p>"],
+ ["Comment structurer une réponse à l’examen ?","<p>D’après le document… → Problème → Risque → Principe de sécurité → Solution → Bénéfice. Restez dans le périmètre du document analysé. Voir l’<a href=\"#annexes/a-methode\">annexe B</a>.</p>"],
+ ["Que faire d’une clé USB trouvée ?","<p>Ne pas la connecter à un poste : son origine et son contenu ne sont pas vérifiés. La remettre au service compétent.</p>"],
+ ["Où télécharger le cours et les corrections ?","<p>Dans l’onglet <a href=\"#telechargements\">Téléchargements</a> : le fascicule de cours et les corrections sont disponibles au format PDF.</p>"]
+];
+$("#faq-list").innerHTML=FAQ.map(function(f,i){return '<details class="sec" id="faq'+(i+1)+'"><summary>'+f[0]+'</summary><div class="ans">'+f[1]+"</div></details>"}).join("");
+
+/* ---- search ---- */
+function norm(s){return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")}
+var index=[];
+function flat(s){return s.replace(/\s+/g," ").trim()}
+function buildIndex(){
+  tabs.forEach(function(t){t.hidden=false});
+  $$(".sec,section.part").forEach(function(el){
+    var tab=el.closest(".tab");if(!tab)return;
+    var h=$("h2,h3,summary,h1",el)||el;
+    var nn=el.matches("h3")?null:$(".n",h);
+    var title=el.matches("h3")?flat(el.innerText):(nn?flat(nn.innerText)+" — "+flat(h.innerText.slice(nn.innerText.length)):flat(h.innerText));
+    var txt=el.matches("h3")?"":flat(el.innerText);
+    index.push({tab:tab.id.slice(4),id:el.id,title:title,text:txt,n:norm(title+" "+txt),tag:$("h1",tab)?flat($("h1",tab).innerText):""});
+  });
+  /* h3 sub-sections: attach following text */
+  $$("#tab-seance1 h3.sec").forEach(function(h){
+    var t=[],n=h.nextElementSibling;
+    while(n&&!/^H[23]$/.test(n.tagName)){t.push(n.innerText);n=n.nextElementSibling}
+    var txt=flat(t.join(" "));
+    var i=index.filter(function(x){return x.id===h.id})[0];
+    if(i){i.text=txt;i.n=norm(i.title+" "+txt)}
+  });
+  index=index.filter(function(x){return x.id});
+  tabs.forEach(function(t){t.hidden=true});
+}
+buildIndex();
+var res=$("#results"),qi=$("#q");
+function esc(s){return s.replace(/[&<>]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;"}[c]})}
+function doSearch(){
+  var q=norm(qi.value.trim());
+  if(q.length<2){res.classList.remove("on");res.innerHTML="";return}
+  var out=[];
+  index.forEach(function(x){
+    var p=x.n.indexOf(q);if(p<0)return;
+    var titleHit=norm(x.title).indexOf(q)>=0;
+    out.push({x:x,s:titleHit?0:1,p:p});
+  });
+  out.sort(function(a,b){return a.s-b.s||a.p-b.p});
+  out=out.slice(0,8);
+  if(!out.length){res.innerHTML='<a href="#" tabindex="-1"><b>Aucun résultat</b>Essayez un autre mot-clé.</a>';res.classList.add("on");return}
+  res.innerHTML=out.map(function(o){
+    var t=o.x.text,pos=norm(t).indexOf(q),sn="";
+    if(pos>=0){var a=Math.max(0,pos-40);sn=esc(t.slice(a,pos))+"<em>"+esc(t.slice(pos,pos+q.length))+"</em>"+esc(t.slice(pos+q.length,pos+q.length+70));if(a>0)sn="…"+sn}
+    return '<a href="#'+o.x.tab+"/"+o.x.id+'"><span class="tag">'+esc(o.x.tag)+"</span><b>"+esc(o.x.title)+"</b>"+sn+"</a>";
+  }).join("");
+  res.classList.add("on");
+}
+qi.addEventListener("input",doSearch);
+qi.addEventListener("focus",doSearch);
+res.addEventListener("click",function(e){if(e.target.closest("a")){setTimeout(function(){res.classList.remove("on");qi.blur()},0)}});
+document.addEventListener("click",function(e){if(!e.target.closest(".search"))res.classList.remove("on")});
+document.addEventListener("keydown",function(e){
+  var tg=(e.target.tagName||"").toLowerCase();
+  if(e.key==="/"&&tg!=="input"&&tg!=="textarea"){e.preventDefault();qi.focus()}
+  if(e.key==="Escape"){res.classList.remove("on");body.classList.remove("open");syncAria();qi.blur()}
+});
+
+route();
+})();
+</script>
+</body>
+</html>
