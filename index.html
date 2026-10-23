@@ -13,7 +13,7 @@
   --head:#14284b;--teal:#0e7c86;--amber:#d98e04;--red:#b3261e;--green:#2e7d32;--purple:#5b3fa0;--blue:#3b6fd1;
   --thbg:#14284b;--thfg:#fff;--side:#14284b;--sidefg:#c9d6ea;--sideact:#0e7c86;
   --shadow:0 1px 2px rgba(20,40,75,.08),0 6px 18px rgba(20,40,75,.06);
-  --top:58px;--sw:290px;--fs:100%;
+  --top:58px;--sw:312px;--fs:100%;
 }
 html[data-theme="dark"]{
   --bg:#0d1520;--card:#152130;--ink:#e6edf5;--muted:#9fb0c3;--line:#26364a;--soft:#1a2a3d;
@@ -57,6 +57,7 @@ a{color:var(--teal)}
 .sidebar nav{display:flex;flex-direction:column;gap:2px}
 .nav-i{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;color:var(--sidefg);text-decoration:none;font-weight:600;font-size:.95rem;white-space:nowrap;position:relative}
 .nav-i .ic{width:26px;text-align:center;font-size:1.15rem;flex:none}
+.nav-i .lb{overflow:hidden;text-overflow:ellipsis}
 .nav-i:hover{background:rgba(255,255,255,.08);color:#fff}
 .nav-i.active{background:var(--sideact);color:#fff}
 .sub{display:flex;flex-direction:column;margin:2px 0 8px 22px;border-left:2px solid rgba(255,255,255,.14)}
@@ -188,6 +189,20 @@ footer a:hover{border-color:var(--teal)}
   .search{max-width:none}
 }
 @media (max-width:560px){.brand{display:none}.tools .iconbtn{min-width:36px;padding:0 6px}.tools .hide-s{display:none}}
+
+[hidden]{display:none!important}
+.grp{font-size:.7rem;text-transform:uppercase;letter-spacing:.09em;color:rgba(201,214,234,.6);padding:14px 12px 4px;font-weight:700;white-space:nowrap}
+.nav-i.indent{margin-left:14px;font-size:.88rem;padding:7px 12px;font-weight:600}
+body.collapsed .grp{display:none}
+body.collapsed .nav-i.indent{margin-left:0;padding:10px 0}
+.crumb{font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0 0 12px}
+.pager{display:flex;justify-content:space-between;gap:12px;margin-top:8px;flex-wrap:wrap}
+.pager a{flex:1 1 220px;display:flex;flex-direction:column;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;text-decoration:none;color:var(--ink);box-shadow:var(--shadow)}
+.pager a:hover{border-color:var(--teal)}
+.pager small{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:.7rem}
+.pager b{color:var(--head)}
+.pager a.next{text-align:right;margin-left:auto}
+@media (max-width:900px){body.collapsed .grp{display:block}body.collapsed .nav-i.indent{margin-left:14px;padding:7px 12px}}
 @media print{
   .topbar,.sidebar,.progress,.totop,.overlay,footer .links,.noprint{display:none!important}
   .main{margin:0;padding:0}body{background:#fff;color:#000}
@@ -218,22 +233,22 @@ footer a:hover{border-color:var(--teal)}
 
 <aside class="sidebar" id="sidebar" aria-label="Menu principal">
   <nav>
-    <a class="nav-i" href="#presentation" data-tab="presentation" data-tip="Présentation"><span class="ic">🏠</span><span class="lb">Présentation</span></a>
-    <a class="nav-i" href="#seance1" data-tab="seance1" data-tip="Séance 1 — Risques liés aux usages"><span class="ic">📘</span><span class="lb">Séance 1 · Les usages</span></a>
-    <div class="sub" id="sub-seance1">
-      <a href="#seance1/p0" data-a="p0">Objectifs &amp; déroulement</a>
-      <a href="#seance1/p1" data-a="p1">1 · Pourquoi sécuriser ?</a>
-      <a href="#seance1/p2" data-a="p2">2 · BYOD, télétravail, USB</a>
-      <a href="#seance1/p3" data-a="p3">3 · Ingénierie sociale &amp; phishing</a>
-      <a href="#seance1/p3-6" data-a="p3-6">&nbsp;&nbsp;↳ Variantes du phishing</a>
-      <a href="#seance1/p4" data-a="p4">4 · Charte informatique</a>
-      <a href="#seance1/p5" data-a="p5">5 · Étude de cas &amp; QCM</a>
-      <a href="#seance1/p6" data-a="p6">6 · Synthèse</a>
-    </div>
-    <a class="nav-i" href="#seance2" data-tab="seance2" data-tip="Séance 2"><span class="ic">🛡️</span><span class="lb">Séance 2 · À venir</span></a>
-    <a class="nav-i" href="#annexes" data-tab="annexes" data-tip="Annexes"><span class="ic">📎</span><span class="lb">Annexes</span></a>
-    <a class="nav-i" href="#faq" data-tab="faq" data-tip="FAQ"><span class="ic">❓</span><span class="lb">FAQ</span></a>
-    <a class="nav-i" href="#telechargements" data-tab="telechargements" data-tip="Téléchargements"><span class="ic">⬇️</span><span class="lb">Téléchargements</span></a>
+    <a class="nav-i" href="#presentation" data-r="presentation" data-tip="Présentation"><span class="ic">🏠</span><span class="lb">Présentation</span></a>
+    <div class="grp">Séance 1 · Risques liés aux usages</div>
+    <a class="nav-i" href="#seance1/p0" data-r="seance1/p0" data-tip="Objectifs &amp; déroulement"><span class="ic">🎯</span><span class="lb">Objectifs &amp; déroulement</span></a>
+    <a class="nav-i" href="#seance1/p1" data-r="seance1/p1" data-tip="1 · Pourquoi sécuriser ?"><span class="ic">🧠</span><span class="lb">1 · Pourquoi sécuriser ?</span></a>
+    <a class="nav-i" href="#seance1/p2" data-r="seance1/p2" data-tip="2 · BYOD, télétravail, USB"><span class="ic">📱</span><span class="lb">2 · BYOD, télétravail, USB</span></a>
+    <a class="nav-i" href="#seance1/p3" data-r="seance1/p3" data-tip="3 · Ingénierie sociale &amp; phishing"><span class="ic">🎣</span><span class="lb">3 · Ingénierie sociale &amp; phishing</span></a>
+    <a class="nav-i indent" href="#seance1/p3-6" data-r="seance1/p3-6" data-tip="Variantes du phishing"><span class="ic">🎭</span><span class="lb">↳ Variantes du phishing</span></a>
+    <a class="nav-i" href="#seance1/p4" data-r="seance1/p4" data-tip="4 · Charte informatique"><span class="ic">📜</span><span class="lb">4 · Charte informatique</span></a>
+    <a class="nav-i" href="#seance1/p5" data-r="seance1/p5" data-tip="5 · Étude de cas &amp; QCM"><span class="ic">🧪</span><span class="lb">5 · Étude de cas &amp; QCM</span></a>
+    <a class="nav-i" href="#seance1/p6" data-r="seance1/p6" data-tip="6 · Synthèse"><span class="ic">✅</span><span class="lb">6 · Synthèse</span></a>
+    <div class="grp">Ressources</div>
+    <a class="nav-i" href="#annexes" data-r="annexes" data-tip="Annexes"><span class="ic">📎</span><span class="lb">Annexes</span></a>
+    <a class="nav-i" href="#faq" data-r="faq" data-tip="FAQ"><span class="ic">❓</span><span class="lb">FAQ</span></a>
+    <a class="nav-i" href="#telechargements" data-r="telechargements" data-tip="Téléchargements"><span class="ic">⬇️</span><span class="lb">Téléchargements</span></a>
+    <div class="grp">Prochainement</div>
+    <a class="nav-i" href="#seance2" data-r="seance2" data-tip="Séance 2 · À venir"><span class="ic">🛡️</span><span class="lb">Séance 2 · À venir</span></a>
   </nav>
   <div class="side-foot">by Twagirumukiza<br>Support de cours — BTS SIO SISR</div>
 </aside>
@@ -293,6 +308,8 @@ footer a:hover{border-color:var(--teal)}
     <h1>Risques liés aux usages des utilisateurs</h1>
     <div class="chips"><span class="chip">⏱ <b>Durée :</b> 2 heures</span><span class="chip">🎓 <b>Niveau :</b> BTS SIO SISR</span><span class="chip">🎯 <b>Focus examen :</b> phishing</span></div>
   </section>
+
+  <p class="crumb" id="crumb" hidden></p>
 
   <!-- p0 -->
   <section class="part" id="p0">
@@ -502,7 +519,11 @@ footer a:hover{border-color:var(--teal)}
     </tbody></table></div>
     <div class="callout ok"><b>Réflexe professionnel</b><p>Signaler rapidement un incident, même si l’on pense avoir commis une erreur. Un signalement précoce peut limiter les conséquences.</p></div>
 
-    <h3 class="sec" id="p3-6">3.6. Les variantes du phishing</h3>
+    </section>
+
+  <!-- PARTIE 3 — VARIANTES -->
+  <section class="part" id="p3-6">
+    <h2><span class="n">Partie 3</span>3.6. Les variantes du phishing</h2>
     <p>Il existe de nombreuses variantes du phishing (hameçonnage). Les attaques peuvent passer par les courriels, les SMS, les appels téléphoniques ou les réseaux sociaux. Le <b>quishing</b>, qui exploite les QR codes, est une notion à connaître.</p>
     <h4>Les principales variantes du phishing</h4>
     <div class="tbl red"><table><thead><tr><th>Variante</th><th>Principe</th><th>Exemple</th></tr></thead><tbody>
@@ -733,6 +754,7 @@ footer a:hover{border-color:var(--teal)}
   </div>
 </div>
 
+<nav class="pager noprint" id="pager" aria-label="Navigation entre les pages"></nav>
 </div>
 <footer>
   <div>© by <b>Twagirumukiza</b> — Support de cours BTS SIO SISR</div>
@@ -781,38 +803,50 @@ window.addEventListener("resize",function(){if(!mobile())body.classList.remove("
 syncAria();
 
 /* ---- routing ---- */
+var ORDER=[["presentation","Présentation"],["seance1/p0","Objectifs & déroulement"],["seance1/p1","1 · Pourquoi sécuriser ?"],["seance1/p2","2 · BYOD, télétravail, USB"],["seance1/p3","3 · Ingénierie sociale & phishing"],["seance1/p3-6","Variantes du phishing"],["seance1/p4","4 · Charte informatique"],["seance1/p5","5 · Étude de cas & QCM"],["seance1/p6","6 · Synthèse"],["annexes","Annexes"],["faq","FAQ"],["telechargements","Téléchargements"],["seance2","Séance 2 · À venir"]];
 var tabs=$$(".tab"), navs=$$(".nav-i");
 function route(){
   var h=decodeURIComponent((location.hash||"#presentation").slice(1)).split("/");
   var tab=h[0],anchor=h[1]||"";
   if(!document.getElementById("tab-"+tab)){tab="presentation";anchor=""}
+  var target=anchor?document.getElementById(anchor):null;
+  var key=tab,part="";
+  if(tab==="seance1"){
+    var p=target?(target.matches("section.part")?target:target.closest("section.part")):null;
+    part=p?p.id:"p0";
+    if(!p)target=null;
+    $$("#tab-seance1 section.part").forEach(function(sec){sec.hidden=(sec.id!==part)});
+    $("#tab-seance1 .hero").hidden=(part!=="p0");
+    var cr=$("#crumb");cr.hidden=(part==="p0");cr.textContent="Séance 1 · Risques liés aux usages des utilisateurs";
+    key="seance1/"+part;
+  }
   tabs.forEach(function(t){t.hidden=(t.id!=="tab-"+tab)});
-  navs.forEach(function(n){n.classList.toggle("active",n.dataset.tab===tab)});
-  $("#sub-seance1").style.display="";
+  navs.forEach(function(n){n.classList.toggle("active",n.dataset.r===key)});
   body.classList.remove("open");syncAria();
-  var target=anchor&&document.getElementById(anchor);
-  if(target){
+  /* pager */
+  var i=-1;ORDER.forEach(function(o,k){if(o[0]===key)i=k});
+  var pg="";
+  if(i>0)pg+='<a class="prev" href="#'+ORDER[i-1][0]+'"><small>← Précédent</small><b>'+ORDER[i-1][1]+"</b></a>";
+  if(i>=0&&i<ORDER.length-1)pg+='<a class="next" href="#'+ORDER[i+1][0]+'"><small>Suivant →</small><b>'+ORDER[i+1][1]+"</b></a>";
+  $("#pager").innerHTML=pg;
+  /* title + scroll */
+  var ttl;
+  if(tab==="seance1"){ttl=$("#"+part+" h2").textContent.replace(/\s+/g," ").trim()}
+  else{ttl=$("#tab-"+tab+" h1").textContent.replace(/\s+/g," ").trim()}
+  document.title=ttl+" · BTS SIO SISR — Thème 3, Séance 1";
+  if(target&&target.id!==part){
     if(target.tagName==="DETAILS")target.open=true;
     setTimeout(function(){target.scrollIntoView({behavior:"smooth",block:"start"})},30);
   }else{window.scrollTo(0,0)}
-  document.title=(tab==="presentation"?"":$("#tab-"+tab+" h1").textContent+" · ")+"BTS SIO SISR — Thème 3, Séance 1";
   spy();
 }
 window.addEventListener("hashchange",route);
 
-/* ---- scroll: progress, spy, totop ---- */
-var subLinks=$$("#sub-seance1 a");
+/* ---- scroll: progress, totop ---- */
 function spy(){
   var d=document.documentElement,max=d.scrollHeight-window.innerHeight;
   $("#progress").style.width=(max>0?Math.min(100,window.scrollY/max*100):0)+"%";
   $("#totop").classList.toggle("on",window.scrollY>500);
-  if($("#tab-seance1").hidden){subLinks.forEach(function(a){a.classList.remove("on")});return}
-  var cur=null;
-  $$("#tab-seance1 section.part").forEach(function(s){if(s.getBoundingClientRect().top<=110)cur=s.id});
-  var sub=null;
-  var s36=document.getElementById("p3-6");
-  if(cur==="p3"&&s36&&s36.getBoundingClientRect().top<=110)sub="p3-6";
-  subLinks.forEach(function(a){a.classList.toggle("on",a.dataset.a===(sub||cur))});
 }
 var tick=false;
 window.addEventListener("scroll",function(){if(!tick){tick=true;requestAnimationFrame(function(){spy();tick=false})}},{passive:true});
@@ -894,6 +928,7 @@ var index=[];
 function flat(s){return s.replace(/\s+/g," ").trim()}
 function buildIndex(){
   tabs.forEach(function(t){t.hidden=false});
+  $$("#tab-seance1 section.part,#tab-seance1 .hero").forEach(function(x){x.hidden=false});
   $$(".sec,section.part").forEach(function(el){
     var tab=el.closest(".tab");if(!tab)return;
     var h=$("h2,h3,summary,h1",el)||el;
